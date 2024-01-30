@@ -2,26 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+*::-webkit-scrollbar {
+  width: 5px;
+  color: lightgrey;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+*::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: lightgrey;
+  border-radius: 14px;
+  border: 3px solid lightgrey;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: grey;
+  border: 3px solid gray
+}
+
+.center {
+  @apply flex justify-center items-center;
+}
+
+.flex-between {
+  @apply flex justify-between items-center;
+}
+
+.flex-start {
+  @apply flex justify-start items-center;
+}
+
+.column-center {
+  @apply flex flex-col justify-center items-center;
+}
+
+.row-center {
+  @apply flex flex-row justify-center items-center;
+}
+
+.row-between {
+  @apply flex flex-row justify-between items-center;
+}
+
+.row-evenly {
+  @apply flex flex-row justify-evenly items-center;
+}
+
+.row-around {
+  @apply flex flex-row justify-around items-center;
+}
+
+.row-start {
+  @apply flex flex-row justify-start items-center;
+}
+
+.row-end {
+  @apply flex flex-row justify-end items-center;
+}
+
+.column-between {
+  @apply flex flex-col justify-between items-center;
+}
+
+.column-evenly {
+  @apply flex flex-col justify-evenly items-center;
+}
+
+.column-around {
+  @apply flex flex-col justify-around items-center;
+}
+
+.column-start {
+  @apply flex flex-col justify-start items-center;
+}
+
+.column-end {
+  @apply flex flex-col justify-end items-center;
+}
+
+.bg-primary {
+  @apply bg-sky-700
+}
+
+.text-primary{
+  @apply text-sky-700
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  
 }

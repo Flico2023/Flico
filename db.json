@@ -1,0 +1,60 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "productName": "LCW Basic tişört dünyadaki en rahat giysi. Kaçırmadan al. Açıklamaya gerek bile yok görüyorsunuz",
+      "category": "man",
+      "subcategory": "tshirt",
+      "brand": "LCW",
+      "price": 29.99,
+      "color": "blue",
+      "imagePath": "https://img-lcwaikiki.mncdn.com/mnresize/1020/1360/pim/productimages/20232/6467760/v2/l_20232-w31543z8-cvl-98-76-97-189_a.jpg",
+      "productDetail": "lorem ipsum dolor sit amet, consectetur adipiscing elit.lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsumdolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet,consectetur adipiscing elit.lorem ipsumlorem ipsum dolor sit amet, consectetur adipiscing elit.lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsumdolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet,consectetur adipiscing elit.lorem ipsum  ",
+      "stockdetails": [
+        {
+            "id":1,
+          "warehouseID": 1,
+          "size": "XL",
+          "variationAmount": 5,
+          "variationActiveAmount": 5
+        },
+        {
+            "id":2,
+          "warehouseID": 2,
+          "size": "L",
+          "variationAmount": 4,
+          "variationActiveAmount": 5
+        },
+        {
+            "id":3,
+          "warehouseID": 1,
+          "size": "L",
+          "variationAmount": 5,
+          "variationActiveAmount": 5
+        },
+        {
+            "id":4,
+          "warehouseID": 2,
+          "size": "S",
+          "variationAmount": 5,
+          "variationActiveAmount": 5
+        },
+        {
+            "id":5,
+          "warehouseID": 3,
+          "size": "yok1",
+          "variationAmount": 0,
+          "variationActiveAmount": 5
+        }
+        ,
+        {
+            "id":6,
+          "warehouseID": 3,
+          "size": "yok2",
+          "variationAmount": 0,
+          "variationActiveAmount": 0
+        }
+      ]
+    }
+  ]
+}
