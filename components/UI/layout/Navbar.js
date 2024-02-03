@@ -51,6 +51,7 @@ export default function Navbar() {
             </li>
           </ul>
           {/* <p>bagaj hazırla</p> */}
+          <Link href={"/faqs"} className="text-lg">FAQ</Link>
         </nav>
       </nav>
     </header>
