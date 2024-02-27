@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
   }
   catch (error) {
     console.log("error")
-    console.log(err)//HATALARIMI NASIL LOGLARIM
+    console.log(error)//HATALARIMI NASIL LOGLARIM
     return {
       notFound: true
     }

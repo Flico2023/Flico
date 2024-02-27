@@ -1,9 +1,12 @@
 import { mycn } from '@/utils/mycn';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Button from '../UI/elements/Button';
 import toast from 'react-hot-toast';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { UserContext } from '@/context/UserContext';
+import InfoAlert from '../UI/elements/InfoAlert';
+import WarningAlert from '../UI/elements/WarningAlert';
 
 export default function ProductContainer(props) {
     const { product, resultSizes } = props;
@@ -11,9 +14,12 @@ export default function ProductContainer(props) {
 
     const [selectedSize, setSelectedSize] = useState(resultSizes.length > 0 ? resultSizes[0] : null)
     const [amount, setAmount] = useState(1)
+    const { userId } = useContext(UserContext);
+
+    const queryClient = useQueryClient();
 
 
-    const { mutate: addToCart, isLoading, error: submitError } = useMutation({
+    const { mutate: addToCart, isPending, error: submitError } = useMutation({
         mutationFn: async (body) => {
             const url = "http://localhost:5059/api/cart";
             const method = "POST";
@@ -26,8 +32,8 @@ export default function ProductContainer(props) {
         },
         onSuccess: () => {
             toast.success("Product added to cart");
-            //!queryClient.invalidateQueries({ queryKey: ["cart"] });
-            //! burası nolcak bilmem
+            queryClient.invalidateQueries({ queryKey: ["carts"] });
+
         },
         onError: (error) => {
             console.log(error);
@@ -36,12 +42,21 @@ export default function ProductContainer(props) {
     });
 
     const addCartHandler = () => {
+        //!BURDA AUTH İŞLEMİ YAPILCAK
+        if (!userId) { toast.error("Please login first"); return; }
+
+        if (!selectedSize) { toast.error("Please select a size"); return; }
+
+
         const body = {
             productID,
             size: selectedSize,
             amount,
-            userID: 1
+            status: "Checkout",
+            userID: userId
         }
+
+
 
         addToCart(body);
     }
@@ -50,10 +65,10 @@ export default function ProductContainer(props) {
     return (
         <div className='flex justify-center items-start mt-4 gap-3'>
             <div className='w-1/2'>
-                {/* <img src={imagePath} alt="image"/> */}
+
                 <img
-                    //src={imagePath}
-                    src="https://img-lcwaikiki.mncdn.com/mnresize/600/800/mpsellerportal/v1/img_040116995v1_e6873bfe-5194-439b-875a-1296213a7919.jpg"
+                    src={imagePath}
+
                     alt="Product Image"
                     loading="lazy"
                     className="object-cover w-full h-full"
@@ -67,26 +82,30 @@ export default function ProductContainer(props) {
                     <span className=''> - </span>
                     <span className=''> {productID}</span>
                 </h2>
-                <h1 className='text-3xl font-semibold mt-8'>{price} TL</h1>
+                <h1 className='text-3xl font-semibold my-8'>{price} TL</h1>
 
-                <div className='flex items-center justify-start mt-8 gap-1 flex-wrap'>
-                    {resultSizes.map((size, index) => {
-                        return <button key={index} onClick={() => setSelectedSize(size)}
-                            className={mycn("py-1 px-2 rounded ", {
-                                'text-gray-500 border border-gray-500 ': selectedSize !== size,
-                                'text-white bg-primary': selectedSize === size,
-                            })}>{size}</button>
-                    })}
+                {resultSizes.length > 0 ?
+                    (<>
+                        <div className='flex items-center justify-start gap-1 flex-wrap'>
+                            {resultSizes.map((size, index) => {
+                                return <button key={index} onClick={() => setSelectedSize(size)}
+                                    className={mycn("py-1 px-2 rounded w-12", {
+                                        'text-gray-500 border border-gray-500 ': selectedSize !== size,
+                                        'text-white bg-primary border border-sky-700': selectedSize === size,
+                                    })}>{size}</button>
+                            })}
 
-                </div>
+                        </div>
 
-                <div className='mt-12'>
-                    <Button styles="w-full" onClick={addCartHandler}> Add to Cart</Button>
-                </div>
+                        <div className='mt-12'>
+                            <Button styles="w-full" onClick={addCartHandler} disabled={isPending}> Add to Cart</Button>
+                        </div></>)
+                    : <InfoAlert message="We currently do not have this product"></InfoAlert>}
+
 
 
                 <div className='mt-8'>
-                    <p className='text-gray-500 font-medium'>Details</p>
+                    <p className='text-gray-500 font-medium text-xl'>Details</p>
                     <p className='text-gray-800 mt-1'>{productDetail}</p>
                 </div>
 
@@ -97,39 +116,3 @@ export default function ProductContainer(props) {
     )
 }
 
-const mock = {
-    product: {
-        productID: 20,
-        productName: 'Dünyanın en güzel kıyafeti',
-        category: 'man',
-        subcategory: 'shirt',
-        amount: 5,
-        brand: 'nike',
-        price: 1000,
-        productDetail: 'Açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama açıklama ',
-        currentPrice: 1000,
-        gender: 'man',
-        color: 'blue',
-        imagePath: 'C:\\Users\\Emre\\Desktop\\FLICO\\FlicoBackend\\ApiConsume\\FlicoProject.WebApi\\wwwroot\\product_images\\3fljpxsz.png',
-        image: null
-    },
-    stockDetail: [
-        {
-            stockDetailID: 1,
-            productID: 20,
-            warehouseID: 1,
-            size: 'XS',
-            variationAmount: 10,
-            variationActiveAmount: 5
-        },
-        {
-            stockDetailID: 2,
-            productID: 20,
-            warehouseID: 0,
-            size: 'string',
-            variationAmount: 0,
-            variationActiveAmount: 0
-        }
-    ],
-    resultSizes: ['XS']
-}

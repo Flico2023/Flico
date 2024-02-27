@@ -45,7 +45,7 @@ export default function AllProductsPage(props) {
     const totalPageCount = Math.floor(totalCount / pageSize) + 1;
 
     return pageIndex == totalPageCount;
-  }, []);
+  }, [ ]);
 
 
 
