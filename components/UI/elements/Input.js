@@ -31,7 +31,7 @@ export default function Input(props) {
                 {label ?? camelToFlat(name)}
             </label>
 
-            {(type == "text" || type == "email") && <input
+            {(type !== "textarea" ) && <input
                 className="w-full mt-1 bg-gray-100 border-transparent
                 focus:outline-none focus:ring-0"
                 {...register(name)}

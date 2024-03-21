@@ -1,4 +1,5 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import { set } from "react-hook-form";
 
 export const ProductFiltersContext = createContext({
   addArrayFilter: () => {},
@@ -6,17 +7,37 @@ export const ProductFiltersContext = createContext({
   updateSingleFilter: () => {},
 });
 
-const initialFilters = {
-  subcategory: "",
-  brand: [],
-  min: null,
-  max: null,
-  color: [],
-  sizes: [],
-};
-
 const ProductFiltersProvider = ({ children }) => {
-  const [filters, setFilters] = useState(initialFilters);
+  const [filters, setFilters] = useState({
+    //category sayfadan alınacak
+    subcategory: [],
+    brand: [],
+    min: null,
+    max: null,
+    color: [],
+    sizes: [],
+  });
+
+  //burda
+  const [queryString, setQueryString] = useState(null);
+
+  const [pageConfig, setPageConfig] = useState({
+    pageSize: 5,
+    pageIndex: 1,
+  });
+
+  const resetFilters = () => {
+    setFilters({
+      subcategory: [],
+      brand: [],
+      min: null,
+      max: null,
+      color: [],
+      sizes: [],
+    });
+    //setPageConfig({ pageSize: 5, pageIndex: 1 });
+
+  };
 
   function updateSingleFilter(name, value) {
     setFilters({ ...filters, [name]: value });
@@ -32,46 +53,73 @@ const ProductFiltersProvider = ({ children }) => {
     setFilters({ ...filters, [name]: newFilter });
   }
 
+  const updatePageConfig = (newValues) => {
+    setPageConfig((prev) => ({ ...prev, ...newValues }));
+  };
+
+  useEffect(() => {
+    buildQueryString();
+  }, [filters]);
+
   /** burdan query ve routera erişebilir miyim acaba */
 
   function buildQueryString() {
-    const queryString = Object.keys(filters)
+    const searchParams = { ...filters};
+
+
+    //console.log("SEARCH PARAMS", searchParams)
+
+    const queryString = Object.keys(searchParams)
       .map((key) => {
-        let value = filters[key];
+        let value = searchParams[key];
 
         // Özel durumları kontrol et
-        if (value === null || value === undefined || value === "") {
+        if (!value || (Array.isArray(value) && value.length === 0)) {
           return null; // Tanımsız veya boş değerleri atla
         }
 
         // String değerleri işle
-        if (typeof value === "string") {
+        if (typeof value === "string" || typeof value === "number") {
           return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
         }
 
         // Dizi değerleri işle
-        if (Array.isArray(value) && value.length > 0) {
+        if (Array.isArray(value)) {
           return `${encodeURIComponent(key)}=${value
             .map(encodeURIComponent)
             .join(",")}`;
-        }
-
-        // Sayısal değerleri işle
-        if (typeof value === "number") {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
         }
 
         return null; // Diğer durumları atla
       })
       .filter((param) => param !== null)
       .join("&");
-    console.log("queryString",queryString);
-    return queryString;
+
+      //console.log("QUERY STRING", queryString)
+      if(queryString ){
+        setQueryString("&"+queryString);
+      }
+      else{
+        setQueryString("");
+      }
+
+
+    //return queryString;
   }
 
   return (
     <ProductFiltersContext.Provider
-      value={{ filters, addArrayFilter, removeArrayFilter, updateSingleFilter,buildQueryString }}
+      value={{
+        filters,
+        addArrayFilter,
+        removeArrayFilter,
+        updateSingleFilter,
+        buildQueryString,
+        queryString,
+
+        
+        resetFilters
+      }}
     >
       {children}
     </ProductFiltersContext.Provider>

@@ -3,25 +3,25 @@
 @tailwind utilities;
 
 *::-webkit-scrollbar {
-  width: 5px;
-  color: lightgrey;
+  width: 2px; /* veya daha küçük bir değer */
+  height: 4px; /* veya daha küçük bir değer */
 }
 
 *::-webkit-scrollbar-track {
   background: white;
-  border-radius: 5px;
 }
 
 *::-webkit-scrollbar-thumb {
   background-color: lightgrey;
-  border-radius: 14px;
-  border: 3px solid lightgrey;
+  border: 1px solid lightgrey;
+  border-radius: 3px; /* Daha küçük bir değer */
 }
 
 *::-webkit-scrollbar-thumb:hover {
   background-color: grey;
-  border: 3px solid gray
+  border: 1px solid gray;
 }
+
 
 .center {
   @apply flex justify-center items-center;

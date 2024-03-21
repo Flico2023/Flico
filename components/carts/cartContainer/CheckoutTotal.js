@@ -22,7 +22,7 @@ export default function CheckoutTotal({ carts }) {
       <p className='text-2xl my-4'>{cartSubTotals.cartItemsCount} products</p>
       <p className='text-2xl my-4 font-semibold'>{cartSubTotals.cartTotalPrice} TL</p>
       <Link href={"/checkout"}>
-        <Button styles="text-2xl p-2 font-normal w-full">Complete Shopping</Button></Link>
+        <Button styles="text-2xl p-2 font-normal w-full">Checkout</Button></Link>
     </div>
   )
 }

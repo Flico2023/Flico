@@ -9,167 +9,175 @@ import ShoppersSvg from '@/components/other/ShoppersSvg'
 import { ProductFiltersContext } from '@/context/ProductsFilterProvider'
 import { mycn } from '@/utils/mycn'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useCallback, useContext, useEffect, useState, useRef } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
 
-let firstRender1 = true;
+let firstRender = true;
 let firstRender2 = true;
 
+
 export default function AllProductsPage(props) {
+  //IS LAST PAGE EKLENECEK
   const [products, setProducts] = useState(props.products)
   const [moreLoading, setMoreLoading] = useState(false)
   const [newLoading, setNewLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [hasMore, setHasMore] = useState(true)
-  const [pageIndex, setPageIndex] = useState(props.pageIndex)
-  const [pageSize, setPageSize] = useState(props.pageSize)
-  const [total, setTotal] = useState(props.total)
-
-  const observer = useRef();
-  const lastElementRef = useCallback(node => {
-    if (moreLoading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && !isLastPage(total, pageSize, pageIndex)) {
-
-        loadMore();
-      }
-    }
-    );
-    if (node) observer.current.observe(node);
-  }, [moreLoading, hasMore]);
+  const [error, setError] = useState()
+  const [isLastPage, setIsLastPage] = useState(props.isLastPage)
+  const [pageConfig, setPageConfig] = useState({
+    pageSize: props.pageSize,
+    pageIndex: props.pageIndex,
+  })
 
 
-  const { buildQueryString, filters } = useContext(ProductFiltersContext)
-  const isLastPage = useCallback((totalCount, pageSize, pageIndex) => {
-    const totalPageCount = Math.floor(totalCount / pageSize) + 1;
 
-    return pageIndex == totalPageCount;
-  }, [ ]);
+  const [totalCount, setTotalCount] = useState(props.totalCount)
 
+  const { queryString, resetFilters } = useContext(ProductFiltersContext)
+
+  //console.log("PROPS PRODUCTS", props.products)
+  //console.log("STATE PRODUCTS", products)
+
+
+  const router = useRouter();
+  const { category } = router.query;
+
+  useEffect(() => {
+
+    setProducts([...props.products]);
+    resetFilters()
+  }, [props]);
 
 
   useEffect(() => {
-    if (firstRender2) {
-      firstRender2 = false;
+    if (firstRender) {
+      firstRender = false;
       return;
     }
 
     async function handleFilterChange() {
       setNewLoading(true)
       try {
-        const queryString = buildQueryString()
-        const res = await axios.get(`http://localhost:5059/api/product?PageIndex=1&PageSize=${pageSize}${"&" + queryString}`)
-        const { products, pageSize: newPageSize, total, pageIndex: newPageIndex } = res.data.data
+
+        const res = await axios.get(`http://localhost:5059/api/product?category=${category}${queryString}&pageIndex=1&pageSize=5`)
+        console.log("RESPONSE", res.data.data)
+        const { products, pageSize: newPageSize,  pageIndex: newPageIndex, isLastPage } = res.data.data
+
+        console.log("filterchange query",`category=${category}${queryString}&pageIndex=1&pageSize=5`)
         setProducts([...products])
-        setPageIndex(1)
-        //setPageSize(pageSize)
-        setTotal(total)
-        if (isLastPage(total, newPageSize, newPageIndex)) {
-          setHasMore(false)
-        }
+        setIsLastPage(isLastPage)
+        setPageConfig({ pageSize: 5, pageIndex: 1 })
+
+
       } catch (err) {
+        console.error(err.message)
         setError(err.message)
-        console.error(err)
+
       }
       setNewLoading(false)
     }
     handleFilterChange()
-  }, [filters])//bunu nasıl halledicem bu arada
+  }, [queryString, category])//bunu nasıl halledicem bu arada
 
-
-  async function loadMore() {
-    setMoreLoading(true);
-    try {
-      const queryString = buildQueryString();
-      const res = await axios.get(`http://localhost:5059/api/product?PageIndex=${pageIndex + 1}&PageSize=${pageSize}${"&" + queryString}`);
-      const { products: newProducts, total } = res.data.data;
-      console.log("res", res.data.data)
-      setProducts((prevProducts) => [...prevProducts, ...newProducts]);
-      setTotal(total);
-      if (isLastPage(total, pageSize, pageIndex)) {
-        setHasMore(false);
-      }
-      setPageIndex((prevPageNumber) => prevPageNumber + 1);
-    } catch (err) {
-      setError(err.message);
-      console.error(err)
-    }
-    setMoreLoading(false);
+  function loadMore() {
+    setPageConfig(prev => ({...prev ,pageIndex: prev.pageIndex + 1 }))
   }
 
+ /* useEffect(() => {
+    if (firstRender2) {
+      firstRender2 = false;
+      return;
+    }
+
+    async function handleLoadMore() {
+      setMoreLoading(true)
+      try {
+        const res = await axios.get(`http://localhost:5059/api/product?category=${category}${queryString}&pageIndex=${pageConfig.pageIndex}&pageSize=${pageConfig.pageSize}`)
+        const { products: newProducts, totalCount, isLastPage } = res.data.data
+
+        console.log("loadmore query", `category=${category}${queryString}&pageIndex=${pageConfig.pageIndex}&pageSize=${pageConfig.pageSize}`)
+
+        console.log("loadmore products", newProducts)
+        setProducts((prevProducts) => [...prevProducts, ...newProducts])
+        setTotalCount(totalCount)
+        setIsLastPage(isLastPage)
+      } catch (err) {
+        setError(err.message)
+      }
+      setMoreLoading(false)
+    }
+    handleLoadMore()
+  }, [pageConfig])*/
+
+  async function handleLoadMore() {
+    setMoreLoading(true)
+    try {
+      const res = await axios.get(`http://localhost:5059/api/product?category=${category}${queryString}&pageIndex=${pageConfig.pageIndex + 1}&pageSize=${pageConfig.pageSize}`)
+      const { products: newProducts, totalCount, isLastPage } = res.data.data
+
+      console.log("loadmore query", `category=${category}${queryString}&pageIndex=${pageConfig.pageIndex}&pageSize=${pageConfig.pageSize}`)
+
+      console.log("loadmore products", newProducts)
+      setProducts((prevProducts) => [...prevProducts, ...newProducts])
+      setTotalCount(totalCount)
+      setIsLastPage(isLastPage)
+      setPageConfig(prev => ({...prev ,pageIndex: prev.pageIndex + 1 }))
+    } catch (err) {
+      setError(err.message)
+    }
+    setMoreLoading(false)
+  }
+
+
   return (
-
     <div className='flex justify-center items-start mt-4 gap-3'>
-
       <aside className='w-1/4 sticky top-4'>
         <ProductFilter />
       </aside>
       <main className='w-3/4' id='products-container'>
-
         {newLoading && <ProductsSkeleton />}
-        {!newLoading && products &&
-          products.length > 0 && <main className="grid grid-cols-3 gap-4">
-            {
-              products.map((product, index) => {
-                if (products.length === index + 1) {
-                  return <SingleProductCard key={product.productID} product={product} ref={lastElementRef} />
-                }
-                else {
-                  return <SingleProductCard key={product.productID} product={product} />
-                }
-              })}
-
+        {!newLoading && products && products.length > 0 && (
+          <main className="grid grid-cols-3 gap-4">
+            {products.map((product) => (
+              <SingleProductCard key={product.productID} product={product} />
+            ))}
             {moreLoading && <LoadingSpinner />}
-          </main>}
-
-        {products?.length === 0 && !newLoading && <div className='column-center mt-12'>
-          <ShoppersSvg w={"500"} h={"500"} />
-          <h1 className='text-2xl text-gray-700'>No products found</h1>
-        </div>
-        }
-
+          </main>
+        )}
+        {products && products.length > 0 && !moreLoading && !isLastPage && (
+          <div className='flex justify-center my-4'>
+            <Button onClick={handleLoadMore} styles='inline w-1/4'>Load More</Button>
+          </div>
+        )}
+        {products?.length === 0 && (
+          <div className='column-center mt-12'>
+            <ShoppersSvg w={"500"} h={"500"} />
+            <h1 className='text-2xl text-gray-700'>No products found</h1>
+          </div>
+        )}
       </main>
     </div>
-
-
-  )
+  );
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: [
-      { params: { category: "man" } },
-      { params: { category: "woman" } },
-      { params: { category: "kids" } },
-      { params: { category: "accessories" } },
-    ],
-    fallback: false
-  };
-}
 
-export async function getStaticProps(context) {
+
+export async function getServerSideProps(context) {
   try {
-    const { params } = context;
-    const { category } = params;
-    console
-    const response = await axios.get(`http://localhost:5059/api/product?PageIndex=1&PageSize=4&Category=${category}`)
-    const products = response.data.data.products;
-    const pageIndex = response.data.data.pageIndex;
-    const pageSize = response.data.data.pageSize;
-    const total = response.data.data.total;
+    const { category } = context.query
 
-
+    const response = await axios.get(`http://localhost:5059/api/product?pageIndex=1&pageSize=5&category=${category}`)
+    const { products, pageIndex, pageSize, totalCount, isLastPage } = response.data.data;
+    console.log(products)
     return {
       props: {
-        products, pageIndex, pageSize, total
+        products, pageIndex, pageSize, totalCount, isLastPage
       },
-      //revalidate: 1 * 60 * 60  // In seconds this is 1 hour
+
     }
   }
   catch (err) {
-    console.log("error")
-    console.log(err)//HATALARIMI NASIL LOGLARIM
+
+    console.error(err)//HATALARIMI NASIL LOGLARIM
     return {
       notFound: true
     }

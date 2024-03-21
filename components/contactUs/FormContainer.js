@@ -12,10 +12,10 @@ import { trimObj } from '@/utils/trimObj';
 
 
 const contactUsDefaults = {
-    name: "a",
-    email: "b",
-    subject: "c",
-    message: "d",
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
 };
 
 const contactUsSchema = yup.object().shape({
@@ -68,7 +68,7 @@ export default function FormContainer() {
             <form
                 onSubmit={handleSubmit(onSubmitHandler)}
                 noValidate>
-                <div className='grid grid-cols-2 gap-12 w-4/5 m-auto'>
+                <div className='grid grid-cols-2 gap-4 w-4/5 m-auto'>
                     <div className='col-span-1'>
                         <Input
                             register={register}

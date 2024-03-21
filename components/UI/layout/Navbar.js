@@ -25,7 +25,7 @@ export default function Navbar() {
               </button>
             </Link>
 
-            <Link href={"/profile"}>
+            <Link href={"/profile?category=orders"}>
               <button className="column-center">
                 <IoPersonOutline className="text-3xl text-primary" />
                 <p className="text-primary text-xs" >Profile</p>
@@ -43,12 +43,7 @@ export default function Navbar() {
             <li>
               <NavLink to="man">Man</NavLink>
             </li>
-            <li>
-              <NavLink to="kids">Kids</NavLink>
-            </li>
-            <li>
-              <NavLink to="accessories">Accessories</NavLink>
-            </li>
+
           </ul>
           {/* <p>bagaj hazırla</p> */}
           <Link href={"/faqs"} className="text-lg">FAQ</Link>

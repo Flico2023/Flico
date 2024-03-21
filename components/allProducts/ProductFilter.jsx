@@ -48,22 +48,17 @@ export default function ProductFilter() {
     function onPriceChangeHandler(e){
       const {name, value} = e.target;
       setPrice(() => ({...price, [name]:value}))
-      console.log({...price, [name]:value})
+
     }
 
     function onPriceButtonClickHandler(){
       /** arka tarafta bu nasıl oluyor acaba */
       const minPrice = +price.minPrice;
       const maxPrice = +price.maxPrice;
+//! BURAYI MAX VE MIN OLARAK DÜZELT
+      ProductFilterCtx.updateSingleFilter("min",minPrice);
+      ProductFilterCtx.updateSingleFilter("max",maxPrice);
 
-      ProductFilterCtx.updateSingleFilter("minPrice",minPrice);
-      ProductFilterCtx.updateSingleFilter("maxPrice",maxPrice)
-
-    }
-
-    function onRadioChangeHandler(e){
-      const {name,value} = e.target;
-      ProductFilterCtx.updateSingleFilter(name,value);
     }
 
   return (
@@ -88,15 +83,15 @@ export default function ProductFilter() {
           </div>
             {tabState.subcategories && (
                 <div className="max-h-[20vh] overflow-y-scroll">
-                {productConfig.subcategories[category].map((subcategory) => (
+                {productConfig.subcategories.map((subcategory) => (
                     <div key={subcategory.value} className="flex flex-start gap-2">
                         <input
-                        type="radio"
+                        type="checkbox"
                         name="subcategory"
                         value={subcategory.value}
                         id={subcategory.value}
                         className="w-5 h-5"
-                        onChange={onRadioChangeHandler}
+                        onChange={onArrayFilterChangeHandler}
                         />
                         <label htmlFor={subcategory.value} className="text-lg">
                         {subcategory.label}
@@ -183,7 +178,7 @@ export default function ProductFilter() {
         </div>
 
         <div className="border-b py-1">
-          {/* SIZES - ÇOCUK BÖLÜMÜNE GELİNCE BURASI YAŞLARI KAPSAYACAK ŞEKİLDE GELİŞECEK*/}
+
           <div className="flex-between">
             <h4 className="text-xl font-semibold">Sizes</h4>
             <button
