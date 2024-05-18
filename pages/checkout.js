@@ -1,6 +1,8 @@
 import CheckoutForm from '@/components/checkout/CheckoutForm'
 import CheckoutInfo from '@/components/checkout/CheckoutInfo'
 import CheckoutProducts from '@/components/checkout/CheckoutProducts'
+import SecureRoute from '@/components/other/SecureRoute';
+import { useLogin } from '@/context/LoginContext';
 import { UserContext } from '@/context/UserContext';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -8,7 +10,7 @@ import React, { useContext } from 'react'
 
 export default function checkout() {
 
-  const {userId} = useContext(UserContext);
+  const {userId} = useLogin();
 
 
   const { data: carts, isError, error, isFetching, isLoading } = useQuery({
@@ -27,6 +29,7 @@ export default function checkout() {
 });
 
   return (
+    <SecureRoute>
     <div>
       <div className='mt-8'>
         <h1 className='text-4xl'>Complete Shopping</h1>  
@@ -43,6 +46,6 @@ export default function checkout() {
         </div>
         
       </div>
-    </div>
+    </div></SecureRoute>
   )
 }

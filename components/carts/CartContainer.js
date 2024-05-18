@@ -1,5 +1,5 @@
 import ErrorAlert from '@/components/UI/elements/ErrorAlert';
-import { UserContext } from '@/context/UserContext'
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios';
 import React, { useCallback, useContext } from 'react'
@@ -8,9 +8,10 @@ import CartSkeletons from './CartSkeletons';
 import CartEmpty from './CartEmpty';
 import CartItems from './CartItems';
 import CheckoutTotal from './CheckoutTotal';
+import { useLogin } from '@/context/LoginContext';
 
 export default function CartContainer() {
-    const {userId} = useContext(UserContext);
+    const {userId} = useLogin();
     const queryClient = useQueryClient();
 
     const { data: carts, isError, error, isFetching, isLoading } = useQuery({
@@ -51,9 +52,6 @@ export default function CartContainer() {
             </div>
           )}
    
-
-
-    
     </div>
   )
 

@@ -53,6 +53,20 @@ export default function Input(props) {
                 onBlur={() => setFocused(false)}
                 {...rest}
                 />}
+                {type == "select" && <select
+                className="w-full mt-1 bg-gray-100 border-transparent
+                focus:outline-none focus:ring-0"
+                {...register(name)}
+                id={name}
+                name={name}
+                type={"select"}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                {...rest}
+                >
+                    {props.children}
+                </select>}
+                
 </div>
 
            {!errors[name] ? (

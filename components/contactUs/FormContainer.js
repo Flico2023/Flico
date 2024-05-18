@@ -63,7 +63,7 @@ export default function FormContainer() {
 
 
     return (
-        <div>
+        <div className='w-4/5 m-auto'>
             <h1 className='text-4xl text-center my-8'>Contact Us</h1>
             <form
                 onSubmit={handleSubmit(onSubmitHandler)}
@@ -106,7 +106,7 @@ export default function FormContainer() {
                     {isError && <div className='col-span-2'>
                         <ErrorAlert message={error.response.data.message} />
                     </div>}
-                    <div className='col-span-2'>
+                    <div className='center w-1/2'>
                         <Button type="submit" styles="w-full" disabled={isPending }>Submit</Button>
                     </div>
 

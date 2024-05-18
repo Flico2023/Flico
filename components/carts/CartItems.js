@@ -8,6 +8,7 @@ import useDebounce from '@/hooks/useDebounce';
 import { CartItemSkeleton } from './CartSkeletons';
 import toast, { ToastBar } from 'react-hot-toast';
 import axios from 'axios';
+import { useLogin } from '@/context/LoginContext';
 
 
 export default function CartItems({ carts }) {
@@ -30,7 +31,7 @@ function CartItem({ cart }) {
     const { amount, product, status } = cart;
     const [localAmount, setLocalAmount] = useState(cart.amount);
 
-    const { userId } = useContext(UserContext);
+    const { userId } = useLogin();
     const queryClient = useQueryClient();
     const debouncedAmount = useDebounce(localAmount, 500);
 

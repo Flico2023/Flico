@@ -11,8 +11,8 @@ const SingleProductCard = forwardRef((props, ref) => {
       <article ref={ref}>
         <div className="relative h-[60vh] overflow-hidden">
           <img
-            //src={imagePath}
-            src="https://img-lcwaikiki.mncdn.com/mnresize/600/800/mpsellerportal/v1/img_040116995v1_e6873bfe-5194-439b-875a-1296213a7919.jpg"
+            src={imagePath}
+
             alt="Product Image"
             loading="lazy"
             className="object-cover w-full h-full"

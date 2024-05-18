@@ -166,11 +166,11 @@ export async function getServerSideProps(context) {
     const { category } = context.query
 
     const response = await axios.get(`http://localhost:5059/api/product?pageIndex=1&pageSize=5&category=${category}`)
-    const { products, pageIndex, pageSize, totalCount, isLastPage } = response.data.data;
+    const { products, pageIndex, pageSize, isLastPage } = response.data.data;
     console.log(products)
     return {
       props: {
-        products, pageIndex, pageSize, totalCount, isLastPage
+        products, pageIndex, pageSize, isLastPage
       },
 
     }

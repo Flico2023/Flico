@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { IoCartOutline } from "react-icons/io5";
 import { IoPersonOutline } from "react-icons/io5";
+import { IoHeartOutline } from "react-icons/io5";
 
 
 export default function Navbar() {
@@ -29,6 +30,13 @@ export default function Navbar() {
               <button className="column-center">
                 <IoPersonOutline className="text-3xl text-primary" />
                 <p className="text-primary text-xs" >Profile</p>
+              </button>
+            </Link>
+
+            <Link href={"/favourities"}>
+              <button className="column-center">
+                <IoHeartOutline className="text-3xl text-primary" />
+                <p className="text-primary text-xs" >Favourities</p>
               </button>
             </Link>
 

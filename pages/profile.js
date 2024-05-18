@@ -1,3 +1,4 @@
+import SecureRoute from '@/components/other/SecureRoute';
 import ProfileNavbar from '@/components/profile/ProfileNavbar'
 import ProfileOrders from '@/components/profile/ProfileOrders';
 import ProfileSidebar from '@/components/profile/ProfileSidebar'
@@ -8,6 +9,7 @@ export default function ProfilePage() {
   const { query } = useRouter();
 
   return (
+    <SecureRoute>
     <div>
       <header>
         <h1 className='text-4xl my-8'>Profile</h1>
@@ -26,5 +28,6 @@ export default function ProfilePage() {
         </main>
       </main>
     </div>
+    </SecureRoute>
   )
 }
