@@ -5,6 +5,7 @@ import React from "react";
 import { IoCartOutline } from "react-icons/io5";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoHeartOutline } from "react-icons/io5";
+import SearchBar from "./SearchBar";
 
 
 export default function Navbar() {
@@ -12,10 +13,11 @@ export default function Navbar() {
     <header className="py-2 shadow w-full center ">
       <nav className="w-4/5">
         {/* İLK SATIR */}
-        <nav className="flex-between w-full mb-3">
+        <nav className="flex-between w-full mb-3 gap-8">
           <Link href="/">
             <h1 className="text-sky-700 text-4xl">FLICO</h1>
           </Link>
+          <SearchBar/>
           {/* İKONLAR */}
           <div className="flex-between gap-4">
 
