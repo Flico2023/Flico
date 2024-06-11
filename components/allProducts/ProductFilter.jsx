@@ -52,7 +52,7 @@ export default function ProductFilter() {
     }
 
     function onPriceButtonClickHandler(){
-      /** arka tarafta bu nasıl oluyor acaba */
+     
       const minPrice = +price.minPrice;
       const maxPrice = +price.maxPrice;
 //! BURAYI MAX VE MIN OLARAK DÜZELT
@@ -236,8 +236,8 @@ export default function ProductFilter() {
                   type="number"
                   placeholder="Min"
                   className="rounded p-1 w-[40%] border focus:outline-none"
-                  name="min"
-                  value={price.min}
+                  name="minPrice"
+                  value={price.minPrice}
                   onChange={onPriceChangeHandler}
                 />
                 
@@ -245,8 +245,8 @@ export default function ProductFilter() {
                   type="number"
                   placeholder="Max"
                   className="rounded p-1 w-[40%] border focus:outline-none"
-                  name="max"
-                  value={price.max}
+                  name="maxPrice"
+                  value={price.maxPrice}
                   onChange={onPriceChangeHandler}
                 />
 
