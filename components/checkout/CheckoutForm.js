@@ -153,7 +153,7 @@ export default function CheckoutForm({ carts }) {
         >
 
           <option value="">Select an airport</option>
-          <option value={-1}>test</option>
+          
           {airports?.map(airport => (
             <option key={airport.airportID} value={airport.airportID}>{airport.airportName}</option>
           ))}
